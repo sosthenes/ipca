@@ -1,142 +1,110 @@
+
 <template>
   <div>
-    <CRow>
-      <CCol md="12">
-        <CCard>
-          <CCardHeader>
-            <h4>Índices por mês</h4>
-          </CCardHeader>
-          <CCardBody>
-            <CRow>
-              <CCol sm="12" lg="6">
-                <CRow>
-                  <CCol sm="6">
-                    <CSelect
-                        @change="selecionaMes($event)"
-                        label="Selecione o mês"
-                        :options="mesesCombo"
-                        :value="mesesCombo"
-                      />
-                  </CCol>
-                  <CCol sm="6">
-                  </CCol>
-                </CRow>
-              </CCol>
-              <CCol sm="12" lg="6">
-                <CRow>
-                  <CCol sm="8">
-                  </CCol>
-                  <CCol sm="4">
-                      <CButton
-                        color="primary"
-                        class="mb-2"
-                        :href="csvCode"
-                        download="IPCA.csv"
-                        target="_blank"
-                      >
-                        Download IPCA (.csv)
-                      </CButton>
-                  </CCol>
-                </CRow>
-              </CCol>
-            </CRow>
-
-            <CRow>
-              <CCol md="12">
-                  <CDataTable
-                      :items="posts"
-                      :fields="fields"
-                      column-filter
-                      table-filter
-                      items-per-page-select
-                      :items-per-page="5"
-                      hover
-                      sorter
-                      pagination
-                      @filtered-items-change="setCurrentItems"
-                    >
-                      <template #show_details="{ item, index }">
-                        <td class="py-2">
-                          <CButton
-                            color="primary"
-                            variant="outline"
-                            square
-                            size="sm"
-                            @click="toggleDetails(item, index)"
-                          >
-                            {{ Boolean(item._toggled) ? "Hide" : "Show" }}
-                          </CButton>
-                        </td>
-                      </template>
-                      <template #details="{ item }">
-                        <CCollapse
-                          :show="Boolean(item._toggled)"
-                          :duration="collapseDuration"
-                        >
-                          <CCardBody>
-                            <ul>
-                              <li
-                                class="list-group-item"
-                                v-for="(detalh, index) of detalheTabela"
-                                :key="detalh.id"
-                              >
-                                <span v-if="index > 0" class="text-muted">
-                                  {{ detalh.D4N }} - {{ detalh.V }} - {{ detalh.D3N }}
-                                </span>
-                                <span v-if="index == 0" class="text-muted">
-                                  Itens medidos
-                                </span>
-                              </li>
-                            </ul>
-                          </CCardBody>
-                        </CCollapse>
-                      </template>
-                  </CDataTable>
-              </CCol>
-            </CRow>
-          </CCardBody>
-        </CCard>
-      </CCol>
-    </CRow>
+    <CSelect
+      @change="selecionaMes($event)"
+      label="Selecione a data"
+      :options="mesesCombo"
+      :value="mesesCombo"
+    />
+    <!--
+    <ul>
+      <li
+        class="list-group-item"
+        v-for="anoMes of mesesCombo"
+        :key="anoMes.id"
+        @click="selecionaMes(anoMes)"
+      >
+        {{ anoMes.id }} - {{ anoMes.label }}
+      </li>
+    </ul>
+-->
+    <CCardBody>
+      <CButton
+        color="primary"
+        class="mb-2"
+        :href="csvCode"
+        download="IPCA.csv"
+        target="_blank"
+      >
+        Download IPCA (.csv)
+      </CButton>
+      <CDataTable
+        :items="posts"
+        :fields="fields"
+        column-filter
+        table-filter
+        items-per-page-select
+        :items-per-page="5"
+        hover
+        sorter
+        pagination
+        @filtered-items-change="setCurrentItems"
+      >
+        <template #show_details="{ item, index }">
+          <td class="py-2">
+            <CButton
+              color="primary"
+              variant="outline"
+              square
+              size="sm"
+              @click="toggleDetails(item, index)"
+            >
+              {{ Boolean(item._toggled) ? "Hide" : "Show" }}
+            </CButton>
+          </td>
+        </template>
+        <template #details="{ item }">
+          <CCollapse
+            :show="Boolean(item._toggled)"
+            :duration="collapseDuration"
+          >
+            <CCardBody>
+              <ul>
+                <li
+                  class="list-group-item"
+                  v-for="(detalh, index) of detalheTabela"
+                  :key="detalh.id"
+                >
+                  <span v-if="index > 0" class="text-muted">
+                    {{ detalh.D4N }} - {{ detalh.V }} - {{ detalh.D3N }}
+                  </span>
+                  <span v-if="index == 0" class="text-muted">
+                    Itens medidos
+                  </span>
+                </li>
+              </ul>
+            </CCardBody>
+          </CCollapse>
+        </template>
+      </CDataTable>
+    </CCardBody>
 
     <CRow>
       <CCol md="12">
         <CCard>
           <CCardHeader>
-            <h4>Gráfico A</h4>
+            <div>
+              <h4>Data início</h4>
+            </div>
+            <div>
+              Data início:
+              <CSelect
+                label="Selecione a data início"
+                :options="mesesCombo"
+                :value="mesesCombo"
+              />
+            </div>
+            <div>
+              Data fim:
+              <CSelect
+                label="Selecione a data fim"
+                :options="mesesCombo"
+                :value="mesesCombo"
+              />
+            </div>
           </CCardHeader>
           <CCardBody>
-            <CRow>
-              <CCol sm="12" lg="6">Selecione o período</CCol>
-            </CRow>
-            <CRow>
-              <CCol sm="12" lg="6">
-                <CRow>
-                  <CCol sm="4">
-                        <CSelect
-                          label="Mês de início"
-                          :options="mesesCombo"
-                          :value="mesesCombo"
-                        />
-                  </CCol>
-                  <CCol sm="4">
-                      <CSelect
-                        label="Mês de fim"
-                        :options="mesesCombo"
-                        :value="mesesCombo"
-                      />
-                  </CCol>
-                </CRow>
-              </CCol>
-              <CCol sm="12" lg="6">
-                <CRow>
-                  <CCol sm="6">
-                  </CCol>
-                  <CCol sm="6">
-                  </CCol>
-                </CRow>
-              </CCol>
-            </CRow>
             <CRow>
               <CCol md="12">
                 <CChartBar
@@ -158,9 +126,7 @@
           </CCardHeader>
           <CCardBody>
             <CRow>
-              <CCol md="12">
-                gráfico b....
-              </CCol>
+              <CCol md="12"> gráfico b.... </CCol>
             </CRow>
           </CCardBody>
         </CCard>
@@ -168,6 +134,16 @@
     </CRow>
   </div>
 </template>
+
+
+
+
+
+
+
+
+
+
 
 
 

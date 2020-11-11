@@ -1,29 +1,31 @@
 <template>
-  <CSidebar 
+  <CSidebar
     :minimize="minimize"
     unfoldable
     :show="show"
     @update:show="(value) => $store.commit('set', ['sidebarShow', value])"
   >
     <CSidebarBrand to="/">
-      <CIcon 
-        class="c-sidebar-brand-full" 
-        name="logo" 
+      <CIcon
+        class="c-sidebar-brand-full"
+        name="logo"
         size="custom-size"
-        :height="35" 
+        :height="auto"
+        :width="200"
         viewBox="0 0 556 134"
       />
-      <CIcon 
-        class="c-sidebar-brand-minimized" 
-        name="logo" 
+      <CIcon
+        class="c-sidebar-brand-minimized"
+        name="logo"
         size="custom-size"
-        :height="35"
+        :height="auto"
+        :width="100"
         viewBox="0 0 110 134"
       />
     </CSidebarBrand>
     <CRenderFunction flat :contentToRender="$options.nav"/>
-    <CSidebarMinimizer 
-      class="c-d-md-down-none" 
+    <CSidebarMinimizer
+      class="c-d-md-down-none"
       @click.native="$store.commit('toggle', 'sidebarMinimize')"
     />
   </CSidebar>
@@ -36,10 +38,10 @@ export default {
   nav,
   computed: {
     show () {
-      return this.$store.state.sidebarShow 
+      return this.$store.state.sidebarShow
     },
     minimize () {
-      return this.$store.state.sidebarMinimize 
+      return this.$store.state.sidebarMinimize
     }
   }
 }
